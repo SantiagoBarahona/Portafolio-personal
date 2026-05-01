@@ -174,8 +174,9 @@ export const profileData: ProfileData = {
         "Portafolio personal construido como evaluación del curso de Ingeniería Web en la Universidad de Antioquia. Implementa Atomic Design, Next.js App Router, TypeScript y Tailwind CSS v4. Integra animaciones con Framer Motion y se despliega en Vercel.",
       image: "#1a2a4a",
       tech: ["Next.js", "TypeScript", "Tailwind CSS v4", "Framer Motion"],
-      githubUrl: "https://github.com/santiago-zapatab/portafolio",
-      liveUrl: "https://santiago-zapata.vercel.app",
+      githubUrl:
+        "https://github.com/202601-Ingenieria-Web/Santiago-ZapataBarahona-portafolio",
+      liveUrl: "https://santiago-zapatabarahona.vercel.app",
       year: "2026",
     },
   ],
