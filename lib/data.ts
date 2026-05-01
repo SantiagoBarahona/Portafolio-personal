@@ -163,7 +163,7 @@ export const profileData: ProfileData = {
         "Spring Boot",
       ],
       videoUrl: "/demo_las_vegas.mp4",
-      year: "2024",
+      year: "2025",
     },
     {
       id: "portafolio",
@@ -176,7 +176,7 @@ export const profileData: ProfileData = {
       tech: ["Next.js", "TypeScript", "Tailwind CSS v4", "Framer Motion"],
       githubUrl: "https://github.com/santiago-zapatab/portafolio",
       liveUrl: "https://santiago-zapata.vercel.app",
-      year: "2025",
+      year: "2026",
     },
   ],
 };
