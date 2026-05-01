@@ -1,65 +1,122 @@
-import Image from "next/image";
+/**
+ * Página principal del portafolio web de Santiago Zapata Barahona
+ *
+ * Arquitectura (Atomic Design):
+ *   Átomos     → Button, Badge, ProgressBar, SectionTitle, Avatar
+ *   Moléculas  → ContactItem, SkillBar, SocialIconButton, KnowledgeCard, EducationCard, ProjectCard
+ *   Organismos → LeftSidebar, RightSidebar, HeroSection, KnowledgeSection, EducationSection, PortfolioSection, FooterSection
+ *   Modales    → ProfileModal, ProjectModal
+ *
+ * Layout: 3 columnas con sidebars fijos en desktop.
+ * Responsive: colapsa a una sola columna en móvil.
+ */
+
+import { LeftSidebar } from "@/components/organisms/LeftSidebar";
+import { RightSidebar } from "@/components/organisms/RightSidebar";
+import { HeroSection } from "@/components/organisms/HeroSection";
+import { KnowledgeSection } from "@/components/organisms/KnowledgeSection";
+import { EducationSection } from "@/components/organisms/EducationSection";
+import { PortfolioSection } from "@/components/organisms/PortfolioSection";
+import { FooterSection } from "@/components/organisms/FooterSection";
+import { profileData } from "@/lib/data";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    /*
+     * Contenedor raíz: ocupa toda la pantalla.
+     * En desktop usa grid de 3 columnas con sidebars fijos.
+     * En móvil/tablet apila en una columna.
+     */
+    <div className="min-h-screen bg-bg text-text">
+      {/* ── Layout desktop: 3 columnas ── */}
+      <div className="hidden lg:grid lg:grid-cols-[280px_1fr_72px] lg:h-screen">
+        {/* Sidebar izquierdo — fijo, scroll interno */}
+        <div className="sticky top-0 h-screen overflow-hidden border-r border-border bg-surface">
+          <LeftSidebar data={profileData} />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Contenido central — scroll principal */}
+        <main className="overflow-y-auto">
+          <div className="flex flex-col gap-10 p-8 max-w-4xl mx-auto">
+            <HeroSection data={profileData} />
+            <KnowledgeSection items={profileData.knowledge} />
+            <EducationSection items={profileData.education} />
+            <PortfolioSection projects={profileData.projects} />
+            <FooterSection />
+          </div>
+        </main>
+
+        {/* Sidebar derecho — fijo */}
+        <div className="sticky top-0 h-screen overflow-hidden border-l border-border bg-surface">
+          <RightSidebar links={profileData.social} />
         </div>
-      </main>
+      </div>
+
+      {/* ── Layout móvil / tablet: columna única ── */}
+      <div className="lg:hidden flex flex-col">
+        {/* Header compacto con info de perfil */}
+        <header className="sticky top-0 z-30 border-b border-border bg-surface/95 backdrop-blur-sm px-5 py-3 flex items-center justify-between">
+          <div>
+            <p className="font-display text-xs tracking-widest text-accent uppercase">
+              Portafolio
+            </p>
+            <p className="font-display text-lg font-bold uppercase tracking-wider text-text leading-none">
+              Santiago Z.
+            </p>
+          </div>
+          {/* Links rápidos en móvil */}
+          <div className="flex gap-2">
+            {profileData.social.map((link) => (
+              <a
+                key={link.name}
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={link.name}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-raised border border-border text-text-muted hover:text-accent transition-colors"
+              >
+                {/* Ícono inline para no depender del componente de cliente */}
+                <span className="text-xs">{link.name[0]}</span>
+              </a>
+            ))}
+          </div>
+        </header>
+
+        {/* Contenido apilado */}
+        <main className="flex flex-col gap-8 p-5">
+          {/* Info personal simplificada en móvil */}
+          <section className="rounded-sm bg-surface border border-border p-5 flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <div className="h-14 w-14 rounded-full bg-accent-subtle border-2 border-accent flex items-center justify-center font-display text-xl font-bold text-accent">
+                SZ
+              </div>
+              <div>
+                <h1 className="font-display text-xl font-bold uppercase tracking-wider text-text">
+                  {profileData.fullName}
+                </h1>
+                <p className="font-body text-xs text-accent">
+                  {profileData.tagline}
+                </p>
+              </div>
+            </div>
+            <p className="font-body text-sm font-light leading-relaxed text-text-muted">
+              {profileData.bio}
+            </p>
+          </section>
+
+          <HeroSection data={profileData} />
+          <KnowledgeSection items={profileData.knowledge} />
+          <EducationSection items={profileData.education} />
+          <PortfolioSection projects={profileData.projects} />
+
+          {/* Sidebar izquierdo como sección extra en móvil */}
+          <section className="rounded-sm bg-surface border border-border p-5">
+            <LeftSidebar data={profileData} />
+          </section>
+
+          <FooterSection />
+        </main>
+      </div>
     </div>
   );
 }
